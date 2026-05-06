@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function ownsResource() {
+      return signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    function ownsIncoming() {
+      return signedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    function hasTimestamps() {
+      return request.resource.data.keys().hasAll(['createdAt', 'updatedAt']);
+    }
+
+    match /customers/{customerId} {
+      allow read: if ownsResource();
+      allow create: if ownsIncoming() && hasTimestamps();
+      allow update: if ownsResource() && ownsIncoming();
+      allow delete: if ownsResource();
+    }
+
+    match /loans/{loanId} {
+      function interestMatches() {
+        let p = request.resource.data.principalAmount;
+        let r = request.resource.data.interestRate;
+        let m = request.resource.data.monthlyInterest;
+        return m == p * r / 100;
+      }
+
+      allow read: if ownsResource();
+      allow create: if ownsIncoming() && hasTimestamps() && interestMatches();
+      allow update: if ownsResource() && ownsIncoming() && interestMatches();
+      allow delete: if ownsResource();
+    }
+
+    match /payments/{paymentId} {
+      allow read: if ownsResource();
+      allow create: if ownsIncoming() && hasTimestamps();
+      allow update: if ownsResource() && ownsIncoming();
+      allow delete: if ownsResource();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
