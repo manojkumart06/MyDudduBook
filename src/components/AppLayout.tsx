@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -7,17 +8,27 @@ import {
   DrawerOverlay,
   Flex,
   IconButton,
+  Spinner,
   useBreakpointValue,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Logo } from './Logo';
 import { Sidebar } from './Sidebar';
 import { BottomTabBar } from './BottomTabBar';
 
 const SIDEBAR_WIDTH = 240;
+
+function MainLoader() {
+  return (
+    <Center minH="60vh">
+      <Spinner size="lg" thickness="3px" color="brand.500" />
+    </Center>
+  );
+}
 
 export function AppLayout() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -91,7 +102,9 @@ export function AppLayout() {
           maxW="1440px"
           mx="auto"
         >
-          <Outlet />
+          <Suspense fallback={<MainLoader />}>
+            <Outlet />
+          </Suspense>
         </Box>
 
         {!isDesktop && <BottomTabBar />}

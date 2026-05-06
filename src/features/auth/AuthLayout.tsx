@@ -1,5 +1,6 @@
-import { Box, Container, Heading, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Container, Heading, Link, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import type { ReactNode } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 
 interface Props {
@@ -19,7 +20,15 @@ export function AuthLayout({ title, subtitle, children, footer }: Props) {
       <Container maxW="md" px={{ base: 4, md: 6 }}>
         <Stack spacing={8}>
           <Stack spacing={3} align="center">
-            <Logo size="lg" showTagline align="center" />
+            <Link
+              as={RouterLink}
+              to="/"
+              aria-label="Go to home page"
+              _hover={{ textDecoration: 'none', opacity: 0.85 }}
+              borderRadius="md"
+            >
+              <Logo size="lg" showTagline align="center" />
+            </Link>
           </Stack>
 
           <Box

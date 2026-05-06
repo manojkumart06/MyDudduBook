@@ -1,6 +1,6 @@
 import { Center, Spinner } from '@chakra-ui/react';
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AppLayout } from '@/components/AppLayout';
 import { ProtectedRoute, PublicOnlyRoute } from '@/features/auth/ProtectedRoute';
 
@@ -14,6 +14,7 @@ const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'));
 const LoginPage = lazy(() => import('@/features/auth/LoginPage'));
 const SignUpPage = lazy(() => import('@/features/auth/SignUpPage'));
 const ForgotPasswordPage = lazy(() => import('@/features/auth/ForgotPasswordPage'));
+const NotFoundPage = lazy(() => import('@/features/not-found/NotFoundPage'));
 
 function Fallback() {
   return (
@@ -67,9 +68,8 @@ export function AppRouter() {
           <Route path="loans" element={<LoansPage />} />
           <Route path="payments" element={<PaymentsPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
-
-        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );

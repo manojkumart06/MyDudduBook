@@ -88,33 +88,40 @@ export default function LandingPage() {
         </Container>
       </Box>
 
-      <Container maxW="4xl" py={{ base: 12, md: 20 }} px={{ base: 4, md: 6 }} textAlign="center">
-        <Stack spacing={6} align="center">
-          <Logo size="xl" showTagline align="center" />
+      <Container maxW="5xl" py={{ base: 16, md: 28 }} px={{ base: 4, md: 6 }} textAlign="center">
+        <Stack spacing={{ base: 8, md: 10 }} align="center">
           <Heading
-            size={{ base: 'xl', md: '2xl' }}
-            maxW="2xl"
+            as="h1"
+            size={{ base: 'xl', md: '3xl' }}
+            fontWeight="extrabold"
             lineHeight="1.15"
             letterSpacing="-0.02em"
+            maxW="4xl"
           >
-            Manage personal loans without the spreadsheet
+            MyDudduBook tracks every loan, every payment, and every overdue rupee — so you
+            always know who owes you what.
           </Heading>
-          <Text fontSize={{ base: 'md', md: 'lg' }} color={mutedText} maxW="xl">
-            MyDudduBook tracks every loan, every payment, and every overdue rupee — so you always
-            know who owes you what.
-          </Text>
-          <HStack pt={2} spacing={3} flexWrap="wrap" justify="center">
+          <HStack spacing={3} flexWrap="wrap" justify="center">
             <Button
               as={RouterLink}
               to="/signup"
               colorScheme="brand"
               size="lg"
-              minH="48px"
-              minW="180px"
+              minH="52px"
+              minW="200px"
+              fontSize="md"
             >
               Create free account
             </Button>
-            <Button as={RouterLink} to="/login" variant="outline" size="lg" minH="48px" minW="120px">
+            <Button
+              as={RouterLink}
+              to="/login"
+              variant="outline"
+              size="lg"
+              minH="52px"
+              minW="140px"
+              fontSize="md"
+            >
               Sign in
             </Button>
           </HStack>

@@ -4,6 +4,8 @@ import {
   Grid,
   HStack,
   Heading,
+  Icon,
+  Input,
   SimpleGrid,
   Skeleton,
   Stack,
@@ -11,13 +13,15 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react';
-import { endOfMonth, isAfter, isBefore, isSameMonth, startOfDay, startOfMonth } from 'date-fns';
-import { AlertTriangle, CheckCircle2, Clock, TrendingUp, Wallet } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+import { endOfMonth, format, isAfter, isBefore, isSameMonth, startOfDay, startOfMonth } from 'date-fns';
+import { AlertTriangle, CheckCircle2, Clock, Download, TrendingUp, Wallet } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { PageHeader } from '@/components/PageHeader';
 import { StatCard } from '@/components/StatCard';
 import { StatusBadge } from '@/components/StatusBadge';
+import { useCurrentUserId } from '@/features/auth/AuthContext';
+import { exportMonthlyPayments } from '@/lib/excelExport';
 import { formatCurrency, formatDate, toDate } from '@/lib/formatters';
 import { derivedStatus, isOverdue } from '@/lib/overdue';
 import { useCustomers } from '@/hooks/useCustomers';
@@ -26,12 +30,18 @@ import { useDashboardPayments, useMarkPaid, useSyncOverdue } from '@/hooks/usePa
 import type { Customer, Payment } from '@/types';
 
 export default function DashboardPage() {
+  const uid = useCurrentUserId();
   const customersQ = useCustomers();
   const loansQ = useLoans({ status: 'active' });
   const paymentsQ = useDashboardPayments();
   const syncOverdue = useSyncOverdue();
   const markPaid = useMarkPaid();
   const toast = useToast();
+  const exportInputBg = useColorModeValue('white', 'navy.800');
+  const exportInputBorder = useColorModeValue('gray.200', 'navy.700');
+
+  const [exportMonth, setExportMonth] = useState(() => format(new Date(), 'yyyy-MM'));
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     syncOverdue.mutate();
@@ -106,11 +116,62 @@ export default function DashboardPage() {
     }
   };
 
+  const handleExport = async () => {
+    if (!exportMonth) return;
+    setIsExporting(true);
+    try {
+      const monthDate = new Date(`${exportMonth}-01T00:00:00`);
+      const count = await exportMonthlyPayments({ uid, month: monthDate, customersById });
+      if (count === 0) {
+        toast({
+          status: 'info',
+          title: 'No payments to export',
+          description: `Nothing scheduled in ${format(monthDate, 'MMMM yyyy')}.`,
+        });
+      } else {
+        toast({
+          status: 'success',
+          title: 'Exported',
+          description: `${count} payment${count === 1 ? '' : 's'} for ${format(monthDate, 'MMMM yyyy')}.`,
+        });
+      }
+    } catch {
+      toast({ status: 'error', title: 'Export failed' });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <Box>
       <PageHeader
         title="Dashboard"
         description="Your lending at a glance"
+        action={
+          <HStack spacing={2}>
+            <Input
+              type="month"
+              value={exportMonth}
+              onChange={(e) => setExportMonth(e.target.value)}
+              size="md"
+              maxW="180px"
+              minH="44px"
+              bg={exportInputBg}
+              borderColor={exportInputBorder}
+              _hover={{ borderColor: exportInputBorder }}
+            />
+            <Button
+              leftIcon={<Icon as={Download} boxSize={4} />}
+              onClick={handleExport}
+              isLoading={isExporting}
+              loadingText="Exporting"
+              colorScheme="brand"
+              minH="44px"
+            >
+              Export
+            </Button>
+          </HStack>
+        }
       />
 
       <Grid
