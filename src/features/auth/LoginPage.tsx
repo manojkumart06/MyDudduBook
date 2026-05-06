@@ -11,6 +11,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { PasswordInput } from '@/components/PasswordInput';
 import { authSignInSchema, type SignInValues } from '@/schemas/payment';
 import { useAuth } from './AuthContext';
 import { AuthLayout } from './AuthLayout';
@@ -70,8 +71,7 @@ export default function LoginPage() {
 
           <FormControl isInvalid={!!errors.password} isRequired>
             <FormLabel>Password</FormLabel>
-            <Input
-              type="password"
+            <PasswordInput
               autoComplete="current-password"
               size="lg"
               {...register('password')}

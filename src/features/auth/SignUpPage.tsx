@@ -11,6 +11,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { PasswordInput } from '@/components/PasswordInput';
 import { authSignUpSchema, type SignUpValues } from '@/schemas/payment';
 import { useAuth } from './AuthContext';
 import { AuthLayout } from './AuthLayout';
@@ -63,13 +64,13 @@ export default function SignUpPage() {
 
           <FormControl isInvalid={!!errors.password} isRequired>
             <FormLabel>Password</FormLabel>
-            <Input type="password" autoComplete="new-password" size="lg" {...register('password')} />
+            <PasswordInput autoComplete="new-password" size="lg" {...register('password')} />
             <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!errors.confirm} isRequired>
             <FormLabel>Confirm password</FormLabel>
-            <Input type="password" autoComplete="new-password" size="lg" {...register('confirm')} />
+            <PasswordInput autoComplete="new-password" size="lg" {...register('confirm')} />
             <FormErrorMessage>{errors.confirm?.message}</FormErrorMessage>
           </FormControl>
 
