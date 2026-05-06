@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import type { ComponentType } from 'react';
 
 const TABS: { to: string; label: string; icon: ComponentType<{ size?: number | string }>; end?: boolean }[] = [
-  { to: '/', label: 'Home', icon: LayoutDashboard, end: true },
+  { to: '/dashboard', label: 'Home', icon: LayoutDashboard, end: true },
   { to: '/customers', label: 'Customers', icon: Users },
   { to: '/payments', label: 'Payments', icon: Receipt },
   { to: '/settings', label: 'Settings', icon: Settings },

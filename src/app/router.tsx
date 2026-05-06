@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from '@/components/AppLayout';
 import { ProtectedRoute, PublicOnlyRoute } from '@/features/auth/ProtectedRoute';
 
+const LandingPage = lazy(() => import('@/features/landing/LandingPage'));
 const DashboardPage = lazy(() => import('@/features/dashboard/DashboardPage'));
 const CustomersPage = lazy(() => import('@/features/customers/CustomersPage'));
 const CustomerDetailPage = lazy(() => import('@/features/customers/CustomerDetailPage'));
@@ -26,6 +27,8 @@ export function AppRouter() {
   return (
     <Suspense fallback={<Fallback />}>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
+
         <Route
           path="/login"
           element={
@@ -58,7 +61,7 @@ export function AppRouter() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<DashboardPage />} />
+          <Route path="dashboard" element={<DashboardPage />} />
           <Route path="customers" element={<CustomersPage />} />
           <Route path="customers/:id" element={<CustomerDetailPage />} />
           <Route path="loans" element={<LoansPage />} />

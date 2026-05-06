@@ -17,7 +17,7 @@ import { useAuth } from '@/features/auth/AuthContext';
 import { Logo } from './Logo';
 
 const NAV: { to: string; label: string; icon: ComponentType<{ size?: number | string }> }[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/customers', label: 'Customers', icon: Users },
   { to: '/loans', label: 'Loans', icon: Wallet },
   { to: '/payments', label: 'Payments', icon: Receipt },
@@ -52,7 +52,7 @@ export function Sidebar({ onNavigate }: { onNavigate: () => void }) {
 
         <Stack spacing={1}>
           {NAV.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.to === '/'} onClick={onNavigate}>
+            <NavLink key={item.to} to={item.to} end={item.to === '/dashboard'} onClick={onNavigate}>
               {({ isActive }) => (
                 <HStack
                   bg={isActive ? activeBg : 'transparent'}

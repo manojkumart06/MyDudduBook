@@ -34,7 +34,7 @@ export default function SignUpPage() {
     try {
       await signUp(values.email, values.password);
       toast({ status: 'success', title: 'Account created' });
-      navigate('/', { replace: true });
+      navigate('/dashboard', { replace: true });
     } catch (err) {
       toast({ status: 'error', title: 'Sign-up failed', description: mapAuthError(err) });
     }
